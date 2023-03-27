@@ -1,4 +1,4 @@
-package services;
+package dsy.services;
 
 public interface userService {
     void show();

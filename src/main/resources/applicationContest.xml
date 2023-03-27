@@ -3,39 +3,36 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <!--静态工厂创建userDao-->
-    <bean id="userDao1" class="factory.MyBeanFactory1" factory-method="userDao">
-        <constructor-arg name="name" value="123"></constructor-arg>
-        <constructor-arg name="age" value="7"></constructor-arg>
+    <!--配置数据源信息-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <!--Set注入-->
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+        <property name="url" value="jdbc:mysql://dsy:3306/test"></property>
+        <property name="username" value="root"></property>
+        <property name="password" value="3388047303"></property>
+    </bean>
+    <!--配置 SqlSessionFactoryBean ,作用将 SqlSessionFactory 存储到spring容器-->
+    <!--(代替核心配置文件连接数据库并封装SqlSessionFactory)-->
+    <bean class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+    <!--MapperScannerConfigurer,扫描指定的包,产生Mapper对象,存储到spring容器-->
+    <!--(代替核心配置文件扫包)-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="dsy.mapper"></property>
     </bean>
 
-    <!--配置工厂对象-->
-    <bean id="myBeanFactory2" class="factory.MyBeanFactory2"></bean>
-    <!--动态工厂创建userDao-->
-    <bean id="userDao2" factory-bean="myBeanFactory2" factory-method="userDao"></bean>
+    <!--MyBeanFactoryPostProcessor-->
+    <!--    <bean class="processor.MyBeanFactoryPostProcessor"></bean>-->
+    <!--Bean工厂后处理器批量注册使用自定义注解类至 BeanDefinition-->
+    <!--    <bean class="dsy.processor.myComponentBeanFactoryPostProcessor"></bean>-->
+    <!--Bean后处理器-->
+    <!--    <bean class="dsy.processor.MyBeanPostProcessor"></bean>-->
 
-    <!--自定义FactoryBean实现-->
-    <bean id="userDao3" class="factory.MyBeanFactory3"></bean>
-
-
-    <!--配置 userServiceImpl-->
-    <bean id="userService" class="services.Impl.userServiceImpl"
-          init-method="init" destroy-method="destroy">
-        <!--set方法参数值-->
-        <property name="userDao" ref="userDao"></property>
-        <!--List依赖注入-->
-        <property name="stringList">
-            <list>
-                <value>aaa</value>
-                <value>bbb</value>
-                <value>ccc</value>
-            </list>
-        </property>
-        <!--构造Bean的参数值(不只是有参构造函数的值,也可以是工厂参数)-->
-        <constructor-arg name="str" value="123"></constructor-arg>
-    </bean>
-    <bean id="userService1" class="services.Impl.userServiceImpl"></bean>
     <!--配置 userDaoImpl-->
-    <bean id="userDao" class="dao.Impl.userDaoImpl" autowire="byName"></bean>
+    <!--    <bean id="userDao" class="dsy.dao.Impl.userDaoImpl"></bean>-->
+<bean id="userService" class="dsy.services.Impl.userServiceImpl">
+    <property name="testMapper" ref="testMapper"></property>
+</bean>
 
 </beans>

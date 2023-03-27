@@ -1,4 +1,4 @@
-package dao;
+package dsy.dao;
 
 public interface userDao {
 }

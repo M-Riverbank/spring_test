@@ -4,11 +4,48 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <!--配置 userServiceImpl-->
-    <bean id="userService" class="services.Impl.userServiceImpl">
+    <bean id="userService_test" class="dsy.services.Impl.userServiceImpl">
         <property name="userDao" ref="userDao"></property>
     </bean>
 
     <!--配置 userDaoImpl-->
-    <bean id="userDao" class="dao.Impl.userDaoImpl"></bean>
+    <bean id="userDao_test" class="dsy.dao.Impl.userDaoImpl"></bean>
+
+
+
+    <!--静态工厂创建userDao-->
+    <bean id="userDao1" class="dsy.factory.MyBeanFactory1" factory-method="userDao">
+        <constructor-arg name="name" value="123"></constructor-arg>
+        <constructor-arg name="age" value="7"></constructor-arg>
+    </bean>
+
+    <!--配置工厂对象-->
+    <bean id="myBeanFactory2" class="dsy.factory.MyBeanFactory2"></bean>
+    <!--动态工厂创建userDao-->
+    <bean id="userDao2" factory-bean="myBeanFactory2" factory-method="userDao"></bean>
+
+    <!--自定义FactoryBean实现-->
+    <bean id="userDao3" class="dsy.factory.MyBeanFactory3"></bean>
+
+
+    <!--配置 userServiceImpl-->
+    <bean id="userService" class="dsy.services.Impl.userServiceImpl"
+          init-method="init" destroy-method="destroy">
+        <!--set方法参数值-->
+        <property name="userDao" ref="userDao"></property>
+        <!--List依赖注入-->
+        <property name="stringList">
+            <list>
+                <value>aaa</value>
+                <value>bbb</value>
+                <value>ccc</value>
+            </list>
+        </property>
+        <!--构造Bean的参数值(不只是有参构造函数的值,也可以是工厂参数)-->
+        <constructor-arg name="str" value="123"></constructor-arg>
+    </bean>
+    <bean id="userService1" class="dsy.services.Impl.userServiceImpl"></bean>
+    <!--配置 userDaoImpl-->
+    <bean id="userDao" class="dsy.dao.Impl.userDaoImpl" autowire="byName"></bean>
 
 </beans>

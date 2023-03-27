@@ -1,8 +1,8 @@
-package factory;
+package dsy.factory;
 
 
-import dao.Impl.userDaoImpl;
-import dao.userDao;
+import dsy.dao.Impl.userDaoImpl;
+import dsy.dao.userDao;
 import org.springframework.beans.factory.FactoryBean;
 
 //

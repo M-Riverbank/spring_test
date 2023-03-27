@@ -1,9 +1,10 @@
-package test;
+package dsy.test;
 
-import dao.userDao;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
-import services.userService;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import dsy.services.Impl.userServiceImpl;
+import dsy.services.userService;
 
 public class BeanFactory_test {
     public static void main(String[] args) {
@@ -17,5 +18,16 @@ public class BeanFactory_test {
         userService userService = (userService) beanFactory.getBean("userService");
 //        userDao userDao = (userDao) beanFactory.getBean("userDao");
 
+        //applicationContext测试,对beanFactory进行了封装
+        ClassPathXmlApplicationContext applicationContext =
+                new ClassPathXmlApplicationContext("applicationContest.xml");
+//        userService userService = (userService) applicationContext.getBean("userService");
+//        System.out.println(applicationContext);
+//        System.out.println(userService);
+        userServiceImpl userService1 = (userServiceImpl) applicationContext.getBean("userService1");
+        userService1.show();
+
+        //关闭容器
+        applicationContext.close();
     }
 }

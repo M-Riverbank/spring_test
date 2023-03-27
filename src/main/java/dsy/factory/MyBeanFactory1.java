@@ -1,7 +1,7 @@
-package factory;
+package dsy.factory;
 
-import dao.Impl.userDaoImpl;
-import dao.userDao;
+import dsy.dao.Impl.userDaoImpl;
+import dsy.dao.userDao;
 
 //静态工厂模式创建Bean
 public class MyBeanFactory1 {

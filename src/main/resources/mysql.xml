@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!--配置数据源信息-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <!--Set注入-->
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+        <property name="url" value="jdbc:mysql://dsy:3306/hive"></property>
+        <property name="username" value="root"></property>
+        <property name="password" value="3388047303"></property>
+    </bean>
+
+    <!--配置Connection-->
+    <!--加载Driver-->
+    <bean id="clazz" class="java.lang.Class" factory-method="forName">
+        <constructor-arg name="className" value="com.mysql.jdbc.Driver"></constructor-arg>
+    </bean>
+    <!--获取Connection-->
+    <bean id="connection"
+          class="java.sql.DriverManager"
+          scope="prototype"
+          factory-method="getConnection">
+        <constructor-arg name="url" value="jdbc:mysql://dsy:3306/hive"></constructor-arg>
+        <constructor-arg name="user" value="root"></constructor-arg>
+        <constructor-arg name="password" value="3388047303"></constructor-arg>
+    </bean>
+
+    <!--配置时间对象-->
+    <bean id="simpleDateFormat" class="java.text.SimpleDateFormat">
+        <constructor-arg name="pattern" value="yyyy-MM-dd HH:mm:ss"></constructor-arg>
+    </bean>
+    <bean id="date" factory-bean="simpleDateFormat" factory-method="parse">
+        <constructor-arg name="source" value="2023-07-07 12:00:00"></constructor-arg>
+    </bean>
+
+    <!--mybatis连接-->
+    <bean id="in"
+          class="org.apache.ibatis.io.Resources"
+          factory-method="getResourceAsStream">
+        <constructor-arg name="resource" value="mybatis-config.xml"></constructor-arg>
+    </bean>
+    <bean id="builder" class="org.apache.ibatis.session.SqlSessionFactoryBuilder"></bean>
+    <bean id="sqlSessionFactory"
+          factory-bean="builder"
+          factory-method="build">
+        <constructor-arg name="inputStream" ref="in"></constructor-arg>
+    </bean>
+
+</beans>
